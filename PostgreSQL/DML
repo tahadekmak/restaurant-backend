@@ -1,0 +1,11 @@
+INSERT INTO person VALUES (1, 'Tom', 'Cruise');
+
+INSERT INTO restaurant VALUES (1, 'Pizza Hut', 'American', 20, "Nabatieh", "03469572", "[B@50675690");
+INSERT INTO restaurant VALUES (2, 'Turki', 'Turkish', 20, "Beirut", "76135425", 5);
+INSERT INTO restaurant VALUES (3, 'KFC', 'American', 16, "Sidon", "03574681", 5);
+INSERT INTO restaurant VALUES (4, 'Dominos Pizza', 'American', 30, "Tyre", "81654859", 5);
+INSERT INTO restaurant VALUES (5, 'Macdonaldes', 'American', 25, "Beirut", "71445963", 5);
+INSERT INTO restaurant VALUES (6, 'Cremino', 'Italian', 10, "Beirut", "78148935", 5);
+INSERT INTO restaurant VALUES (7, 'Perfetto', 'Italian', 12, "Nabatieh", "76495668", 5);
+INSERT INTO restaurant VALUES (8, 'Alfredo', 'Italian', 18, "Sidon", "03145384", 5);
+INSERT INTO restaurant VALUES (9, 'Babel', 'Lebanese', 17, "Tyre", "71465319", 5);

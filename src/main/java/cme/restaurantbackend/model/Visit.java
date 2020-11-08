@@ -1,5 +1,7 @@
 package cme.restaurantbackend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -7,33 +9,24 @@ import java.util.Date;
 @Table(name = "visit")
 public class Visit {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-
-    @ManyToOne
-    @MapsId("personID")
-    @JoinColumn(name = "person_id")
-    Person person;
-
-    @ManyToOne
-    @MapsId("restaurantId")
-    @JoinColumn(name = "restaurant_id")
-    Restaurant restaurant;
-
-    Date date;
+    private Long id;
+    private Person person;
+    private Restaurant restaurant;
+    private Date date;
 
     public Visit() {
 
     }
 
-    public Visit(Long id, Person person, Restaurant restaurant, Date date) {
-        this.id = id;
+    public Visit(Person person, Restaurant restaurant, Date date) {
         this.person = person;
         this.restaurant = restaurant;
         this.date = date;
     }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "visit_generator")
+    @SequenceGenerator(name="visit_generator", sequenceName = "visit_seq", allocationSize=50)
     public Long getId() {
         return id;
     }
@@ -42,6 +35,9 @@ public class Visit {
         this.id = id;
     }
 
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "person_id")
     public Person getPerson() {
         return person;
     }
@@ -50,6 +46,9 @@ public class Visit {
         this.person = person;
     }
 
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "restaurant_id")
     public Restaurant getRestaurant() {
         return restaurant;
     }

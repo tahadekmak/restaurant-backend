@@ -1,5 +1,7 @@
 package cme.restaurantbackend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -11,10 +13,7 @@ public class Person {
     private Long id;
     private String firstName;
     private String lastName;
-
-
-    @OneToMany(mappedBy = "person")
-    private Set<Visit> visits = new HashSet<>();
+    private Set<Visit> visits = new HashSet<Visit>();
 
     public Person() {
 
@@ -26,17 +25,10 @@ public class Person {
         this.lastName = lastName;
     }
 
-    public Set<Visit> getVisits() {
-        return visits;
-    }
-
-    public void setVisits(Set<Visit> visits) {
-        this.visits = visits;
-    }
-
     @Id
-    @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "person_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "person_generator")
+    @SequenceGenerator(name="person_generator", sequenceName = "person_seq", allocationSize=50)
     public Long getId() {
         return id;
     }
@@ -63,9 +55,13 @@ public class Person {
         this.lastName = lastName;
     }
 
-    @Override
-    public String toString() {
-        return "Person [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName
-                + "]";
+    @JsonIgnore
+    @OneToMany(mappedBy = "person")
+    public Set<Visit> getVisits() {
+        return visits;
+    }
+
+    public void setVisits(Set<Visit> visits) {
+        this.visits = visits;
     }
 }

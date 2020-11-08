@@ -19,12 +19,12 @@ public class PersonController {
     @Autowired
     private PersonRepository personRepository;
 
-    @GetMapping("/visit")
-    public List<Person> getAllEmployees() {
+    @GetMapping("/person")
+    public List<Person> getAllPersons() {
         return personRepository.findAll();
     }
 
-    @GetMapping("/visit/{id}")
+    @GetMapping("/person/{id}")
     public ResponseEntity<Person> getPersonById(@PathVariable(value = "id") Long personID)
             throws ResourceNotFoundException {
         Person person = personRepository.findById(personID)
@@ -32,13 +32,13 @@ public class PersonController {
         return ResponseEntity.ok().body(person);
     }
 
-    @PostMapping("/visit")
+    @PostMapping("/person")
     public Person createPerson(@Valid @RequestBody Person person) {
         return personRepository.save(person);
     }
 
-    @PutMapping("/visit/{id}")
-    public ResponseEntity<Person> updateEmployee(@PathVariable(value = "id") Long personID,
+    @PutMapping("/person/{id}")
+    public ResponseEntity<Person> updatePerson(@PathVariable(value = "id") Long personID,
                                                  @Valid @RequestBody Person personDetails) throws ResourceNotFoundException {
         Person person = personRepository.findById(personID)
                 .orElseThrow(() -> new ResourceNotFoundException("Person not found for this id :: " + personID));
@@ -49,7 +49,7 @@ public class PersonController {
         return ResponseEntity.ok(updatedEmployee);
     }
 
-    @DeleteMapping("/visit/{id}")
+    @DeleteMapping("/person/{id}")
     public Map<String, Boolean> deletePerson(@PathVariable(value = "id") Long PersonID)
             throws ResourceNotFoundException {
         Person person = personRepository.findById(PersonID)

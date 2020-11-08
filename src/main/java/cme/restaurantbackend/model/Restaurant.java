@@ -1,27 +1,29 @@
 package cme.restaurantbackend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "restaurant")
 public class Restaurant {
 
-    @OneToMany(mappedBy = "restaurant")
-    Set<Visit> visits;
     private Long id;
     private String name;
     private String type;
     private double averageCost;
     private String address;
     private String phoneNumber;
-    private byte image;
+    private byte[] image;
+    private Set<Visit> visits = new HashSet<Visit>();
 
     public Restaurant() {
 
     }
 
-    public Restaurant(Long id, String name, String type, double averageCost, String address, String phoneNumber, byte image) {
+    public Restaurant(Long id, String name, String type, double averageCost, String address, String phoneNumber, byte[] image) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -32,8 +34,9 @@ public class Restaurant {
     }
 
     @Id
-    @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "restaurant_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "restaurant_generator")
+    @SequenceGenerator(name="restaurant_generator", sequenceName = "restaurant_seq", allocationSize=50)
     public Long getId() {
         return id;
     }
@@ -87,16 +90,18 @@ public class Restaurant {
         this.phoneNumber = phoneNumber;
     }
 
-    @Column(name = "image", nullable = false)
-    public byte getImage() {
+    @Lob
+    @Column(name = "image", nullable = true)
+    public byte[] getImage() {
         return image;
     }
 
-    public void setImage(byte image) {
+    public void setImage(byte[] image) {
         this.image = image;
     }
 
-
+    @JsonIgnore
+    @OneToMany(mappedBy = "restaurant")
     public Set<Visit> getVisits() {
         return visits;
     }

@@ -1,5 +1,6 @@
-package cme.restaurantbackend;
+package cme.restaurantbackend.Tests;
 
+import cme.restaurantbackend.RestaurantBackendApplication;
 import cme.restaurantbackend.model.Person;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -62,8 +63,8 @@ public class PersonTest {
     public void testUpdatePerson() {
         int id = 1;
         Person person = restTemplate.getForObject(getRootUrl() + "/person/" + id, Person.class);
-        person.setFirstName("Tom1");
-        person.setLastName("Cruise1");
+        person.setFirstName("Tommy");
+        person.setLastName("Cruise");
         restTemplate.put(getRootUrl() + "/person/" + id, person);
         Person updatedPerson = restTemplate.getForObject(getRootUrl() + "/person/" + id, Person.class);
         assertNotNull(updatedPerson);
@@ -71,7 +72,7 @@ public class PersonTest {
 
     @Test
     public void testDeletePerson() {
-        int id = 2;
+        int id = 1;
         Person person = restTemplate.getForObject(getRootUrl() + "/person/" + id, Person.class);
         assertNotNull(person);
         restTemplate.delete(getRootUrl() + "/person/" + id);

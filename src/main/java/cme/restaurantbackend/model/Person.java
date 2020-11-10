@@ -37,7 +37,7 @@ public class Person {
         this.id = id;
     }
 
-    @Column(name = "fname", nullable = false)
+    @Column(name = "person_fname", nullable = false)
     public String getFirstName() {
         return firstName;
     }
@@ -46,7 +46,7 @@ public class Person {
         this.firstName = firstName;
     }
 
-    @Column(name = "lname", nullable = false)
+    @Column(name = "person_lname", nullable = false)
     public String getLastName() {
         return lastName;
     }

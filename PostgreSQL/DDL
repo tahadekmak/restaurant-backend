@@ -1,1 +1,4 @@
 create database restaurantdb;
+
+=> please note that DDl were auto generated automatically by JPA
+=> please check resources/application.properties

@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/v1")
 public class VisitController {
@@ -30,7 +31,6 @@ public class VisitController {
     private PersonRepository personRepository;
     @Autowired
     private RestaurantRepository restaurantRepository;
-
 
     @GetMapping("/visit")
     public List<Visit> getAllVisits() {

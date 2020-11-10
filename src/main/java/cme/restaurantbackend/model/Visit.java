@@ -57,6 +57,7 @@ public class Visit {
         this.restaurant = restaurant;
     }
 
+    @Column(name = "visit_date", nullable = false)
     public Date getDate() {
         return date;
     }

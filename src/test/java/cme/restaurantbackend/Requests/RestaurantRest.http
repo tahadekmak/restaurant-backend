@@ -3,6 +3,16 @@ Accept: application/json
 
 ###
 
+GET http://localhost:8080/api/v1/restaurantsByName/Mersin
+Accept: application/json
+
+###
+
+GET http://localhost:8080/api/v1/restaurantsByCategory/Turkish
+Accept: application/json
+
+###
+
 GET http://localhost:8080/api/v1/restaurant/1
 Accept: application/json
 
@@ -11,10 +21,10 @@ POST http://localhost:8080/api/v1/restaurant
 Content-Type: application/json
 
 {
-  "name": "Al Turki",
-  "type": "Turkish",
+  "name": "Macdonalds",
+  "category": "American",
   "averageCost": "12",
-  "address": "Nabatieh",
+  "address": "Beirut",
   "phoneNumber": "03564819"
 }
 
@@ -25,7 +35,7 @@ Content-Type: application/json
 
 {
   "name": "Al Turki2",
-  "type": "Turkish",
+  "category": "Turkish",
   "averageCost": "12",
   "address": "Nabatieh",
   "phoneNumber": "03564819"

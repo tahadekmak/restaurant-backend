@@ -1,7 +1,6 @@
 package cme.restaurantbackend.Tests;
 
 import cme.restaurantbackend.RestaurantBackendApplication;
-import cme.restaurantbackend.model.Person;
 import cme.restaurantbackend.model.Restaurant;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -50,6 +49,24 @@ public class RestaurantTest {
     }
 
     @Test
+    public void testGetRestaurantsByName() {
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+        ResponseEntity<String> response = restTemplate.exchange(getRootUrl() + "/restaurantsByName/KFC",
+                HttpMethod.GET, entity, String.class);
+        assertNotNull(response.getBody());
+    }
+
+    @Test
+    public void testGetRestaurantsByCategory() {
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+        ResponseEntity<String> response = restTemplate.exchange(getRootUrl() + "/restaurantsByCategory/American",
+                HttpMethod.GET, entity, String.class);
+        assertNotNull(response.getBody());
+    }
+
+    @Test
     public void testGetRestaurantById() {
         Restaurant restaurant = restTemplate.getForObject(getRootUrl() + "/restaurant/1", Restaurant.class);
         System.out.println(restaurant.getName());
@@ -60,7 +77,7 @@ public class RestaurantTest {
     public void testCreateRestaurant() throws IOException {
         Restaurant restaurant = new Restaurant();
         restaurant.setName("KFC");
-        restaurant.setType("American");
+        restaurant.setCategory("American");
         restaurant.setAverageCost(15);
         restaurant.setAddress("Beirut");
         restaurant.setImage(imageToByteArray("images/kfc_image.jpg"));
@@ -74,7 +91,7 @@ public class RestaurantTest {
         int id = 1;
         Restaurant restaurant = restTemplate.getForObject(getRootUrl() + "/restaurant/" + id, Restaurant.class);
         restaurant.setName("KFC");
-        restaurant.setType("American");
+        restaurant.setCategory("American");
         restaurant.setAverageCost(20);
         restaurant.setAddress("Beirut");
         restaurant.setImage(imageToByteArray("images/kfc_image.jpg"));

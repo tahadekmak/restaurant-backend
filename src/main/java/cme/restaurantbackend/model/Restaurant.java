@@ -12,7 +12,7 @@ public class Restaurant {
 
     private Long id;
     private String name;
-    private String type;
+    private String category;
     private double averageCost;
     private String address;
     private String phoneNumber;
@@ -23,10 +23,10 @@ public class Restaurant {
 
     }
 
-    public Restaurant(Long id, String name, String type, double averageCost, String address, String phoneNumber, byte[] image) {
+    public Restaurant(Long id, String name, String category, double averageCost, String address, String phoneNumber, byte[] image) {
         this.id = id;
         this.name = name;
-        this.type = type;
+        this.category = category;
         this.averageCost = averageCost;
         this.address = address;
         this.phoneNumber = phoneNumber;
@@ -45,7 +45,7 @@ public class Restaurant {
         this.id = id;
     }
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "restaurant_name", nullable = false)
     public String getName() {
         return name;
     }
@@ -54,16 +54,16 @@ public class Restaurant {
         this.name = name;
     }
 
-    @Column(name = "type", nullable = false)
-    public String getType() {
-        return type;
+    @Column(name = "restaurant_category", nullable = false)
+    public String getCategory() {
+        return category;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
-    @Column(name = "average_cost", nullable = false)
+    @Column(name = "restaurant_average_cost", nullable = false)
     public double getAverageCost() {
         return averageCost;
     }
@@ -72,7 +72,7 @@ public class Restaurant {
         this.averageCost = averageCost;
     }
 
-    @Column(name = "address", nullable = false)
+    @Column(name = "restaurant_address", nullable = false)
     public String getAddress() {
         return address;
     }
@@ -81,7 +81,7 @@ public class Restaurant {
         this.address = address;
     }
 
-    @Column(name = "phone_number", nullable = false)
+    @Column(name = "restaurant_phone_number", nullable = false)
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -91,7 +91,7 @@ public class Restaurant {
     }
 
     @Lob
-    @Column(name = "image", nullable = true)
+    @Column(name = "restaurant_image", nullable = true)
     public byte[] getImage() {
         return image;
     }

@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/v1")
 public class RestaurantController {
@@ -22,6 +23,16 @@ public class RestaurantController {
     @GetMapping("/restaurant")
     public List<Restaurant> getAllRestaurants() {
         return restaurantRepository.findAll();
+    }
+
+    @GetMapping("/restaurantsByName/{restaurant_name}")
+    public List<Restaurant> getRestaurantsByName(@PathVariable(value = "restaurant_name") String restaurantName) {
+        return restaurantRepository.findByName(restaurantName);
+    }
+
+    @GetMapping("/restaurantsByCategory/{restaurant_category}")
+    public List<Restaurant> getRestaurantsByCategory(@PathVariable(value = "restaurant_category") String restaurantCategory) {
+        return restaurantRepository.findByCategory(restaurantCategory);
     }
 
     @GetMapping("/restaurant/{id}")
@@ -44,7 +55,7 @@ public class RestaurantController {
                 .orElseThrow(() -> new ResourceNotFoundException("Restaurant not found for this id :: " + RestaurantID));
 
         restaurant.setName(restaurantDetails.getName());
-        restaurant.setType(restaurantDetails.getType());
+        restaurant.setCategory(restaurantDetails.getCategory());
         restaurant.setAverageCost(restaurantDetails.getAverageCost());
         restaurant.setAddress(restaurantDetails.getAddress());
         restaurant.setPhoneNumber(restaurantDetails.getPhoneNumber());

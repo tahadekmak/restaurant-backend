@@ -1,45 +1,34 @@
 package cme.restaurantbackend.model;
 
-import javax.persistence.*;
 import java.util.Date;
 
 public class VisitData {
 
-    private Long personID;
-    private Long restaurantID;
-    private String date;
+    private String restaurantName;
+    private Date visitDate;
 
     public VisitData() {
 
     }
 
-    public VisitData(Long personID, Long restaurantID, String date) {
-        this.personID = personID;
-        this.restaurantID = restaurantID;
-        this.date = date;
+    public VisitData(String restaurantName, Date visitDate) {
+        this.restaurantName = restaurantName;
+        this.visitDate = visitDate;
     }
 
-    public Long getPersonID() {
-        return personID;
+    public String getRestaurantName() {
+        return restaurantName;
     }
 
-    public void setPersonID(Long personID) {
-        this.personID = personID;
+    public void setRestaurantName(String restaurantName) {
+        this.restaurantName = restaurantName;
     }
 
-    public Long getRestaurantID() {
-        return restaurantID;
+    public Date getVisitDate() {
+        return visitDate;
     }
 
-    public void setRestaurantID(Long restaurantID) {
-        this.restaurantID = restaurantID;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
+    public void setVisitDate(Date visitDate) {
+        this.visitDate = visitDate;
     }
 }

@@ -25,6 +25,7 @@ public class Visit {
     }
 
     @Id
+    @Column(name = "visit_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "visit_generator")
     @SequenceGenerator(name="visit_generator", sequenceName = "visit_seq", allocationSize=50)
     public Long getId() {

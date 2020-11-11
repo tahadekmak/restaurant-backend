@@ -2,6 +2,10 @@ GET http://localhost:8080/api/v1/visit
 Accept: application/json
 
 ###
+GET http://localhost:8080/api/v1/visitsByPersonId/1
+Accept: application/json
+
+###
 
 GET http://localhost:8080/api/v1/visit/1
 Accept: application/json
@@ -12,8 +16,8 @@ POST http://localhost:8080/api/v1/visit
 Content-Type: application/json
 
 {
-  "personID": "3",
-  "restaurantID": "1",
+  "personID": "2",
+  "restaurantID": "3",
   "date": "6/7/2020"
 }
 

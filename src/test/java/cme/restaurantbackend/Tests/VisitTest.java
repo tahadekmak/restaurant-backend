@@ -1,8 +1,8 @@
 package cme.restaurantbackend.Tests;
 
 import cme.restaurantbackend.RestaurantBackendApplication;
-import cme.restaurantbackend.model.Person;
 import cme.restaurantbackend.model.Visit;
+import cme.restaurantbackend.model.VisitAbstraction;
 import cme.restaurantbackend.model.VisitData;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -45,6 +45,13 @@ public class VisitTest {
     }
 
     @Test
+    public void testGetVisitsByPersonId() {
+        VisitData visitData = restTemplate.getForObject(getRootUrl() + "/visitsByPersonId/1", VisitData.class);
+        System.out.println(visitData.getRestaurantName());
+        assertNotNull(visitData);
+    }
+
+    @Test
     public void testGetVisitById() {
         Visit visit = restTemplate.getForObject(getRootUrl() + "/visit/1", Visit.class);
         System.out.println(visit.getDate());
@@ -53,7 +60,7 @@ public class VisitTest {
 
     @Test
     public void testCreateVisit() {
-        VisitData visitData = new VisitData();
+        VisitAbstraction visitData = new VisitAbstraction();
         visitData.setPersonID(1L);
         visitData.setRestaurantID(1L);
         visitData.setDate("5/5/2020");
@@ -65,7 +72,7 @@ public class VisitTest {
     @Test
     public void testUpdateVisit() {
         int id = 1;
-        VisitData visitData = new VisitData();
+        VisitAbstraction visitData = new VisitAbstraction();
         visitData.setPersonID(1L);
         visitData.setRestaurantID(1L);
         visitData.setDate("8/5/2020");

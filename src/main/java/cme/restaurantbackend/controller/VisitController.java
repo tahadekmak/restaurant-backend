@@ -1,10 +1,7 @@
 package cme.restaurantbackend.controller;
 
 import cme.restaurantbackend.ResourceNotFoundException;
-import cme.restaurantbackend.model.Person;
-import cme.restaurantbackend.model.Restaurant;
-import cme.restaurantbackend.model.Visit;
-import cme.restaurantbackend.model.VisitData;
+import cme.restaurantbackend.model.*;
 import cme.restaurantbackend.repository.PersonRepository;
 import cme.restaurantbackend.repository.RestaurantRepository;
 import cme.restaurantbackend.repository.VisitRepository;
@@ -37,6 +34,11 @@ public class VisitController {
         return visitRepository.findAll();
     }
 
+    @GetMapping("/visitsByPersonId/{id}")
+    public List<VisitData> getVisitsByPersonId(@PathVariable(value = "id") Long personId) {
+        return visitRepository.findByPersonId(personId);
+    }
+
     @GetMapping("/visit/{id}")
     public ResponseEntity<Visit> getVisitById(@PathVariable(value = "id") Long VisitID)
             throws ResourceNotFoundException {
@@ -46,11 +48,11 @@ public class VisitController {
     }
 
     @PostMapping("/visit")
-    public Visit createVisit(@Valid @RequestBody VisitData visitData) throws ResourceNotFoundException, ParseException {
+    public Visit createVisit(@Valid @RequestBody VisitAbstraction visitAbstraction) throws ResourceNotFoundException, ParseException {
 
-        Long personID = visitData.getPersonID();
-        Long restaurantID = visitData.getRestaurantID();
-        String stringDate = visitData.getDate();
+        Long personID = visitAbstraction.getPersonID();
+        Long restaurantID = visitAbstraction.getRestaurantID();
+        String stringDate = visitAbstraction.getDate();
 
         Date date = new SimpleDateFormat("dd/MM/yyyy").parse(stringDate);
         Person person = personRepository.findById(personID)
@@ -64,7 +66,7 @@ public class VisitController {
 
     @PutMapping("/visit/{id}")
     public ResponseEntity<Visit> updateVisit(@PathVariable(value = "id") Long VisitID,
-                                             @Valid @RequestBody VisitData visitData) throws ResourceNotFoundException, ParseException {
+                                             @Valid @RequestBody VisitAbstraction visitData) throws ResourceNotFoundException, ParseException {
         Visit visit = visitRepository.findById(VisitID)
                 .orElseThrow(() -> new ResourceNotFoundException("Visit not found for this id :: " + VisitID));
 

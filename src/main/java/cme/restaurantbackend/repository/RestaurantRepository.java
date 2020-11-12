@@ -11,9 +11,9 @@ import java.util.List;
 @Repository
 public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
 
-    @Query(value = "SELECT * FROM restaurant WHERE restaurant_name like %:restaurantName%", nativeQuery = true)
+    @Query(value = "SELECT * FROM restaurant WHERE lower(restaurant_name) like %:restaurantName%", nativeQuery = true)
     List<Restaurant> findByName(@Param("restaurantName") String restaurantName);
 
-    @Query(value = "SELECT * FROM restaurant WHERE restaurant_category like %:restaurantCategory%", nativeQuery = true)
+    @Query(value = "SELECT * FROM restaurant WHERE lower(restaurant_category) like %:restaurantCategory%", nativeQuery = true)
     List<Restaurant> findByCategory(@Param("restaurantCategory") String restaurantCategory);
 }

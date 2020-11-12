@@ -27,12 +27,12 @@ public class RestaurantController {
 
     @GetMapping("/restaurantsByName/{restaurant_name}")
     public List<Restaurant> getRestaurantsByName(@PathVariable(value = "restaurant_name") String restaurantName) {
-        return restaurantRepository.findByName(restaurantName);
+        return restaurantRepository.findByName(restaurantName.toLowerCase());
     }
 
     @GetMapping("/restaurantsByCategory/{restaurant_category}")
     public List<Restaurant> getRestaurantsByCategory(@PathVariable(value = "restaurant_category") String restaurantCategory) {
-        return restaurantRepository.findByCategory(restaurantCategory);
+        return restaurantRepository.findByCategory(restaurantCategory.toLowerCase());
     }
 
     @GetMapping("/restaurant/{id}")

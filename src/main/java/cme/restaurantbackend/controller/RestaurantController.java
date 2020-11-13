@@ -2,12 +2,23 @@ package cme.restaurantbackend.controller;
 
 import cme.restaurantbackend.ResourceNotFoundException;
 import cme.restaurantbackend.model.Restaurant;
+import cme.restaurantbackend.model.RestaurantAbstraction;
 import cme.restaurantbackend.repository.RestaurantRepository;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.imageio.ImageIO;
 import javax.validation.Valid;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,5 +85,60 @@ public class RestaurantController {
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return response;
+    }
+
+    @PostMapping("/initRestaurant")
+    public void initRestaurant() throws IOException {
+
+        try {
+
+            File file = this.getFileFromResource("RESTAURANTS_DATA.json");
+
+            final ObjectMapper objectMapper = new ObjectMapper();
+            List<RestaurantAbstraction> resList = objectMapper.readValue(
+                    file,
+                    new TypeReference<>() {
+                    });
+
+            resList.forEach(x -> {
+                System.out.println(x.toString());
+                Restaurant restaurant = new Restaurant();
+                restaurant.setName(x.getName());
+                restaurant.setCategory(x.getCategory());
+                restaurant.setAverageCost(x.getAverageCost());
+                restaurant.setAddress(x.getAddress());
+                restaurant.setPhoneNumber(x.getPhoneNumber());
+                try {
+                    restaurant.setImage(imageToByteArray(x.getImage()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                restaurantRepository.save(restaurant);
+            });
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public byte[] imageToByteArray(String path) throws IOException {
+        InputStream in = RestaurantController.class.getClassLoader().getResourceAsStream(path);
+        BufferedImage bImage = ImageIO.read(in);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ImageIO.write(bImage, "jpg", bos );
+        byte [] data = bos.toByteArray();
+        return data;
+    }
+
+    private File getFileFromResource(String fileName) throws URISyntaxException {
+
+        ClassLoader classLoader = getClass().getClassLoader();
+        URL resource = classLoader.getResource(fileName);
+        if (resource == null) {
+            throw new IllegalArgumentException("file not found! " + fileName);
+        } else {
+            return new File(resource.toURI());
+        }
+
     }
 }

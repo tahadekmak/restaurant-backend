@@ -80,7 +80,7 @@ public class RestaurantTest {
         restaurant.setCategory("American");
         restaurant.setAverageCost(15);
         restaurant.setAddress("Beirut");
-        restaurant.setImage(imageToByteArray("images/kfc_image.jpg"));
+        restaurant.setImage(imageToByteArray("images/image1.jpg"));
         ResponseEntity<Restaurant> postResponse = restTemplate.postForEntity(getRootUrl() + "/restaurant", restaurant, Restaurant.class);
         assertNotNull(postResponse);
         assertNotNull(postResponse.getBody());
@@ -94,7 +94,7 @@ public class RestaurantTest {
         restaurant.setCategory("American");
         restaurant.setAverageCost(20);
         restaurant.setAddress("Beirut");
-        restaurant.setImage(imageToByteArray("images/kfc_image.jpg"));
+        restaurant.setImage(imageToByteArray("images/image1.jpg"));
         restTemplate.put(getRootUrl() + "/person/" + id, restaurant);
         Restaurant updatedRestaurant = restTemplate.getForObject(getRootUrl() + "/restaurant/" + id, Restaurant.class);
         assertNotNull(updatedRestaurant);

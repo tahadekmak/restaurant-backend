@@ -2,12 +2,25 @@ package cme.restaurantbackend.controller;
 
 import cme.restaurantbackend.ResourceNotFoundException;
 import cme.restaurantbackend.model.Person;
+import cme.restaurantbackend.model.PersonAbstraction;
+import cme.restaurantbackend.model.Restaurant;
+import cme.restaurantbackend.model.RestaurantAbstraction;
 import cme.restaurantbackend.repository.PersonRepository;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.imageio.ImageIO;
 import javax.validation.Valid;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,5 +73,44 @@ public class PersonController {
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return response;
+    }
+
+    @PostMapping("/initPerson")
+    public void initPerson() throws IOException {
+
+        try {
+
+            File file = this.getFileFromResource("PERSONS_DATA.json");
+
+            final ObjectMapper objectMapper = new ObjectMapper();
+            List<PersonAbstraction> resList = objectMapper.readValue(
+                    file,
+                    new TypeReference<>() {
+                    });
+
+            resList.forEach(x -> {
+                System.out.println(x.toString());
+                Person person = new Person();
+                person.setFirstName(x.getFirstName());
+                person.setLastName(x.getLastName());
+
+                personRepository.save(person);
+            });
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private File getFileFromResource(String fileName) throws URISyntaxException {
+
+        ClassLoader classLoader = getClass().getClassLoader();
+        URL resource = classLoader.getResource(fileName);
+        if (resource == null) {
+            throw new IllegalArgumentException("file not found! " + fileName);
+        } else {
+            return new File(resource.toURI());
+        }
+
     }
 }

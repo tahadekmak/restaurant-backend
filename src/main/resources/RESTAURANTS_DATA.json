@@ -1,0 +1,15 @@
+[
+  {"name": "Pizza Hut", "category": "American", "averageCost": 20, "address": "Nabatieh", "phoneNumber": "76 947094", "image": "./images/pizzahut_image.jpg"},
+  {"name": "Turki", "category": "Turkish", "averageCost": 20, "address": "Baabda", "phoneNumber": "76 135425", "image": "./images/turki_image.jpg"},
+  {"name": "KFC", "category": "American", "averageCost": 16, "address": "Tyr - Main Road", "phoneNumber": "03 574681", "image": "./images/kfc_image.jpg"},
+  {"name": "Sushi Ko", "category": "Japanese", "averageCost": 70, "address": "Beirut - Hazmieh - City Center", "phoneNumber": "01 293292", "image": "./images/sushi_image.jpg"},
+  {"name": "Macdonaldes", "category": "American", "averageCost": 25, "address": "Nabatieh", "phoneNumber": "71 445963", "image": "./images/mcdonalds_image.jpg"},
+  {"name": "Cremino", "category": "Italian", "averageCost": 10, "address": "Tyr", "phoneNumber": "07 742842", "image": "./images/cremino_image.jpg"},
+  {"name": "Crepaway", "category": "American", "averageCost": 80, "address": "Beirut - Hazmieh - City Center", "phoneNumber": "01288475", "image": "./images/crepaway_image.jpg"},
+  {"name": "Nasma", "category": "Lebanese", "averageCost": 90, "address": "Beirut - Hazmieh - City Center", "phoneNumber": "01288256", "image": "./images/nasma_image.jpg"},
+  {"name": "Perfetto", "category": "Italian", "averageCost": 12, "address": "Ghazir", "phoneNumber": "70 159753", "image": "./images/perfetto_image.jpg"},
+  {"name": "Classic Burger", "category": "Italian", "averageCost": 40, "address": "Beirut - Hamra", "phoneNumber": "01 999610", "image": "./images/classic_image.jpg"},
+  {"name": "Baguette Sub", "category": "American", "averageCost": 30, "address": "Nabatieh - Mahmoud Fakih Road", "phoneNumber": "79 153181", "image": "./images/Baguette_image.jpg"},
+  {"name": "Falafel Abu Rami", "category": "Lebanese", "averageCost": 10, "address": "Sidon - Near Sidon Castle", "phoneNumber": "07 721907", "image": "./images/Falafel_image.jpg"},
+  {"name": "Tanbakji", "category": "Lebanese", "averageCost": 60, "address": "Zahle - Zahle District", "phoneNumber": "08 808208", "image": "./images/tanbakji_image.jpg"}
+]

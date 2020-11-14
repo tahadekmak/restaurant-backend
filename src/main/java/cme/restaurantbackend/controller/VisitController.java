@@ -5,6 +5,7 @@ import cme.restaurantbackend.model.*;
 import cme.restaurantbackend.repository.PersonRepository;
 import cme.restaurantbackend.repository.RestaurantRepository;
 import cme.restaurantbackend.repository.VisitRepository;
+import com.fasterxml.jackson.datatype.jsr310.ser.OffsetDateTimeSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -54,12 +58,15 @@ public class VisitController {
         Long restaurantID = visitAbstraction.getRestaurantID();
         String stringDate = visitAbstraction.getDate();
 
-        Date date = new SimpleDateFormat("dd/MM/yyyy").parse(stringDate);
+        DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter
+                .ofPattern("dd/MM/uuuu'T'HH:mm:ss:SSSXXXXX");
+
+        OffsetDateTime odtInstanceAtOffset = OffsetDateTime.parse(stringDate, DATE_TIME_FORMATTER);
         Person person = personRepository.findById(personID)
                 .orElseThrow(() -> new ResourceNotFoundException("Person not found for this id :: " + personID));
         Restaurant restaurant = restaurantRepository.findById(restaurantID)
                 .orElseThrow(() -> new ResourceNotFoundException("Restaurant not found for this id :: " + restaurantID));
-        Visit visit = new Visit(person, restaurant, date);
+        Visit visit = new Visit(person, restaurant, odtInstanceAtOffset);
 
         return visitRepository.save(visit);
     }
@@ -73,7 +80,10 @@ public class VisitController {
         Long personID = visitData.getPersonID();
         Long restaurantID = visitData.getRestaurantID();
         String stringDate = visitData.getDate();
-        Date date = new SimpleDateFormat("dd/MM/yyyy").parse(stringDate);
+        DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter
+                .ofPattern("dd/MM/uuuu'T'HH:mm:ss:SSSXXXXX");
+
+        OffsetDateTime odtInstanceAtOffset = OffsetDateTime.parse(stringDate, DATE_TIME_FORMATTER);
 
         Person person = personRepository.findById(personID)
                 .orElseThrow(() -> new ResourceNotFoundException("Person not found for this id :: " + personID));
@@ -82,7 +92,7 @@ public class VisitController {
 
         visit.setPerson(person);
         visit.setRestaurant(restaurant);
-        visit.setDate(date);
+        visit.setDate(odtInstanceAtOffset);
 
         final Visit updatedVisit = visitRepository.save(visit);
         return ResponseEntity.ok(updatedVisit);
@@ -99,4 +109,5 @@ public class VisitController {
         response.put("deleted", Boolean.TRUE);
         return response;
     }
+
 }

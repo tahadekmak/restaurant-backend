@@ -1,17 +1,17 @@
 package cme.restaurantbackend.model;
 
-import java.util.Date;
+import java.time.OffsetDateTime;
 
 public class VisitData {
 
     private String restaurantName;
-    private Date visitDate;
+    private OffsetDateTime visitDate;
 
     public VisitData() {
 
     }
 
-    public VisitData(String restaurantName, Date visitDate) {
+    public VisitData(String restaurantName, OffsetDateTime visitDate) {
         this.restaurantName = restaurantName;
         this.visitDate = visitDate;
     }
@@ -24,11 +24,11 @@ public class VisitData {
         this.restaurantName = restaurantName;
     }
 
-    public Date getVisitDate() {
+    public OffsetDateTime getVisitDate() {
         return visitDate;
     }
 
-    public void setVisitDate(Date visitDate) {
+    public void setVisitDate(OffsetDateTime visitDate) {
         this.visitDate = visitDate;
     }
 }

@@ -16,9 +16,9 @@ POST http://localhost:8080/api/v1/visit
 Content-Type: application/json
 
 {
-  "personID": "2",
-  "restaurantID": "3",
-  "date": "6/7/2020"
+  "personID": "1",
+  "restaurantID": "1",
+  "date": "03/08/2019T16:20:17:717+05:30"
 }
 
 ###

@@ -3,7 +3,7 @@ package cme.restaurantbackend.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.OffsetDateTime;
 
 @Entity
 @Table(name = "visit")
@@ -12,13 +12,13 @@ public class Visit {
     private Long id;
     private Person person;
     private Restaurant restaurant;
-    private Date date;
+    private OffsetDateTime date;
 
     public Visit() {
 
     }
 
-    public Visit(Person person, Restaurant restaurant, Date date) {
+    public Visit(Person person, Restaurant restaurant, OffsetDateTime date) {
         this.person = person;
         this.restaurant = restaurant;
         this.date = date;
@@ -59,11 +59,11 @@ public class Visit {
     }
 
     @Column(name = "visit_date", nullable = false)
-    public Date getDate() {
+    public OffsetDateTime getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(OffsetDateTime date) {
         this.date = date;
     }
 }

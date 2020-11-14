@@ -59,7 +59,7 @@ public class VisitController {
         String stringDate = visitAbstraction.getDate();
 
         DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter
-                .ofPattern("dd/MM/uuuu'T'HH:mm:ss:SSSXXXXX");
+                .ofPattern("d/M/uuuu'T'H:m:s:SSSXXXXX");
 
         OffsetDateTime odtInstanceAtOffset = OffsetDateTime.parse(stringDate, DATE_TIME_FORMATTER);
         Person person = personRepository.findById(personID)
@@ -81,7 +81,7 @@ public class VisitController {
         Long restaurantID = visitData.getRestaurantID();
         String stringDate = visitData.getDate();
         DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter
-                .ofPattern("dd/MM/uuuu'T'HH:mm:ss:SSSXXXXX");
+                .ofPattern("d/M/uuuu'T'H:m:ss:SSSXXXXX");
 
         OffsetDateTime odtInstanceAtOffset = OffsetDateTime.parse(stringDate, DATE_TIME_FORMATTER);
 

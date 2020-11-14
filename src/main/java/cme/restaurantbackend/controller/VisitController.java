@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -60,8 +61,20 @@ public class VisitController {
 
         DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter
                 .ofPattern("d/M/uuuu'T'H:m:s:SSSXXXXX");
+        OffsetDateTime ff = OffsetDateTime.parse(stringDate, DATE_TIME_FORMATTER);
+        int year = ff.getYear();
+        int month = ff.getMonthValue();
+        int day = ff.getDayOfMonth();
+        int hours = ff.getHour();
+        int minutes = ff.getMinute();
+        int seconds = ff.getSecond();
+        ZoneOffset zoneOffSet = ff.getOffset();
 
-        OffsetDateTime odtInstanceAtOffset = OffsetDateTime.parse(stringDate, DATE_TIME_FORMATTER);
+        OffsetDateTime odtInstanceAtOffset = LocalDateTime.of(
+                year, month, day,
+                hours, minutes, seconds
+        ).atOffset(zoneOffSet);
+
         Person person = personRepository.findById(personID)
                 .orElseThrow(() -> new ResourceNotFoundException("Person not found for this id :: " + personID));
         Restaurant restaurant = restaurantRepository.findById(restaurantID)
@@ -80,10 +93,22 @@ public class VisitController {
         Long personID = visitData.getPersonID();
         Long restaurantID = visitData.getRestaurantID();
         String stringDate = visitData.getDate();
-        DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter
-                .ofPattern("d/M/uuuu'T'H:m:ss:SSSXXXXX");
 
-        OffsetDateTime odtInstanceAtOffset = OffsetDateTime.parse(stringDate, DATE_TIME_FORMATTER);
+        DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter
+                .ofPattern("d/M/uuuu'T'H:m:s:SSSXXXXX");
+        OffsetDateTime ff = OffsetDateTime.parse(stringDate, DATE_TIME_FORMATTER);
+        int year = ff.getYear();
+        int month = ff.getMonthValue();
+        int day = ff.getDayOfMonth();
+        int hours = ff.getHour();
+        int minutes = ff.getMinute();
+        int seconds = ff.getSecond();
+        ZoneOffset zoneOffSet = ff.getOffset();
+
+        OffsetDateTime odtInstanceAtOffset = LocalDateTime.of(
+                year, month, day,
+                hours, minutes, seconds
+        ).atOffset(zoneOffSet);
 
         Person person = personRepository.findById(personID)
                 .orElseThrow(() -> new ResourceNotFoundException("Person not found for this id :: " + personID));

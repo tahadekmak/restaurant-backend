@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 public interface VisitRepository extends JpaRepository<Visit, Long> {
 
-    @Query("select new cme.restaurantbackend.model.VisitData(r.name, v.date) from Restaurant r join r.visits v  where v.person.id = :personId order by r.name")
+    @Query("select new cme.restaurantbackend.model.VisitData(r.name, v.date) from Restaurant r join r.visits v  where v.person.id = :personId order by v.id")
     List<VisitData> findByPersonId(@Param("personId") Long personId);
 }

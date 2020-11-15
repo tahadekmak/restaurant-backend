@@ -1,5 +1,5 @@
 
-# Please run the following POST requests to Initialize the Database:
+# Please run the following POST requests (in this order) to Initialize the Database:
 (They are also found in test/java/cme.restaurantbackend/Requests)
 
 1- For Persons:

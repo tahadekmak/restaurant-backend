@@ -1,5 +1,6 @@
 
 create database restaurantdb;
+\c restaurantdb
 set timezone = "UTC";
 
 # The following DDL statements are auto-generated, there is no need to execute them, please check resources/application.properties

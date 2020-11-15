@@ -50,7 +50,7 @@ public class VisitController {
     }
 
     @PostMapping("/visit")
-    public Visit createVisit(@Valid @RequestBody VisitAbstraction visitAbstraction) throws ResourceNotFoundException, ParseException {
+    public Visit createVisit(@Valid @RequestBody VisitAbstraction visitAbstraction) throws ResourceNotFoundException {
 
         Long personID = visitAbstraction.getPersonID();
         Long restaurantID = visitAbstraction.getRestaurantID();
@@ -83,13 +83,13 @@ public class VisitController {
 
     @PutMapping("/visit/{id}")
     public ResponseEntity<Visit> updateVisit(@PathVariable(value = "id") Long VisitID,
-                                             @Valid @RequestBody VisitAbstraction visitData) throws ResourceNotFoundException, ParseException {
+                                             @Valid @RequestBody VisitAbstraction visitAbstraction) throws ResourceNotFoundException {
         Visit visit = visitRepository.findById(VisitID)
                 .orElseThrow(() -> new ResourceNotFoundException("Visit not found for this id :: " + VisitID));
 
-        Long personID = visitData.getPersonID();
-        Long restaurantID = visitData.getRestaurantID();
-        String stringDate = visitData.getDate();
+        Long personID = visitAbstraction.getPersonID();
+        Long restaurantID = visitAbstraction.getRestaurantID();
+        String stringDate = visitAbstraction.getDate();
 
         DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter
                 .ofPattern("d/M/uuuu'T'H:m:s:SSSXXXXX");

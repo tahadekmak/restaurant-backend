@@ -4,6 +4,7 @@ import java.time.OffsetDateTime;
 
 public class VisitData {
 
+    private Long visitID;
     private String restaurantName;
     private OffsetDateTime visitDate;
 
@@ -11,9 +12,18 @@ public class VisitData {
 
     }
 
-    public VisitData(String restaurantName, OffsetDateTime visitDate) {
+    public VisitData(Long visitID, String restaurantName, OffsetDateTime visitDate) {
+        this.visitID = visitID;
         this.restaurantName = restaurantName;
         this.visitDate = visitDate;
+    }
+
+    public Long getVisitID() {
+        return visitID;
+    }
+
+    public void setVisitID(Long visitID) {
+        this.visitID = visitID;
     }
 
     public String getRestaurantName() {

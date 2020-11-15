@@ -1,25 +1,27 @@
 package cme.restaurantbackend.model;
 
-public class RestaurantAbstraction {
+import java.util.Arrays;
+
+public class RestaurantData {
 
     private String name;
     private double averageCost;
     private String address;
     private String phoneNumber;
-    private String image;
-    private Long categoryID;
+    private byte[] image;
+    private String category;
 
-    public RestaurantAbstraction() {
+    public RestaurantData() {
 
     }
 
-    public RestaurantAbstraction(String name, double averageCost, String address, String phoneNumber, String image, Long categoryID) {
+    public RestaurantData(String name, double averageCost, String address, String phoneNumber, byte[] image, String category) {
         this.name = name;
         this.averageCost = averageCost;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.image = image;
-        this.categoryID = categoryID;
+        this.category = category;
     }
 
     public String getName() {
@@ -54,32 +56,31 @@ public class RestaurantAbstraction {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getImage() {
+    public byte[] getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(byte[] image) {
         this.image = image;
     }
 
-    public Long getCategoryID() {
-        return categoryID;
+    public String getCategory() {
+        return category;
     }
 
-    public void setCategoryID(Long categoryID) {
-        this.categoryID = categoryID;
+    public void setCategory(String category) {
+        this.category = category;
     }
-
 
     @Override
     public String toString() {
-        return "RestaurantAbstraction{" +
-                ", name='" + name + '\'' +
-                ", category='" + categoryID + '\'' +
+        return "RestaurantData{" +
+                "name='" + name + '\'' +
                 ", averageCost=" + averageCost +
                 ", address='" + address + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
-                ", image='" + image + '\'' +
+                ", image=" + Arrays.toString(image) +
+                ", category='" + category + '\'' +
                 '}';
     }
 }

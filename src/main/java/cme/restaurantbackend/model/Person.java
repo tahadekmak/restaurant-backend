@@ -28,7 +28,7 @@ public class Person {
     @Id
     @Column(name = "person_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "person_generator")
-    @SequenceGenerator(name="person_generator", sequenceName = "person_seq", allocationSize=50)
+    @SequenceGenerator(name = "person_generator", sequenceName = "person_seq", allocationSize = 50)
     public Long getId() {
         return id;
     }

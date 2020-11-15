@@ -3,8 +3,6 @@ package cme.restaurantbackend.controller;
 import cme.restaurantbackend.ResourceNotFoundException;
 import cme.restaurantbackend.model.Person;
 import cme.restaurantbackend.model.PersonAbstraction;
-import cme.restaurantbackend.model.Restaurant;
-import cme.restaurantbackend.model.RestaurantAbstraction;
 import cme.restaurantbackend.repository.PersonRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,13 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.imageio.ImageIO;
 import javax.validation.Valid;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
@@ -53,21 +46,21 @@ public class PersonController {
 
     @PutMapping("/person/{id}")
     public ResponseEntity<Person> updatePerson(@PathVariable(value = "id") Long personID,
-                                                 @Valid @RequestBody Person personDetails) throws ResourceNotFoundException {
+                                               @Valid @RequestBody Person personDetails) throws ResourceNotFoundException {
         Person person = personRepository.findById(personID)
                 .orElseThrow(() -> new ResourceNotFoundException("Person not found for this id :: " + personID));
 
         person.setLastName(personDetails.getLastName());
         person.setFirstName(personDetails.getFirstName());
-        final Person updatedEmployee = personRepository.save(person);
-        return ResponseEntity.ok(updatedEmployee);
+        final Person updatedPerson = personRepository.save(person);
+        return ResponseEntity.ok(updatedPerson);
     }
 
     @DeleteMapping("/person/{id}")
-    public Map<String, Boolean> deletePerson(@PathVariable(value = "id") Long PersonID)
+    public Map<String, Boolean> deletePerson(@PathVariable(value = "id") Long personID)
             throws ResourceNotFoundException {
-        Person person = personRepository.findById(PersonID)
-                .orElseThrow(() -> new ResourceNotFoundException("Person not found for this id :: " + PersonID));
+        Person person = personRepository.findById(personID)
+                .orElseThrow(() -> new ResourceNotFoundException("Person not found for this id :: " + personID));
 
         personRepository.delete(person);
         Map<String, Boolean> response = new HashMap<>();
@@ -76,7 +69,7 @@ public class PersonController {
     }
 
     @PostMapping("/initPerson")
-    public void initPerson() throws IOException {
+    public void initPerson() {
 
         try {
 
@@ -89,7 +82,6 @@ public class PersonController {
                     });
 
             resList.forEach(x -> {
-                System.out.println(x.toString());
                 Person person = new Person();
                 person.setFirstName(x.getFirstName());
                 person.setLastName(x.getLastName());

@@ -1,8 +1,11 @@
 package cme.restaurantbackend.controller;
 
 import cme.restaurantbackend.ResourceNotFoundException;
+import cme.restaurantbackend.model.Category;
 import cme.restaurantbackend.model.Restaurant;
 import cme.restaurantbackend.model.RestaurantAbstraction;
+import cme.restaurantbackend.model.RestaurantData;
+import cme.restaurantbackend.repository.CategoryRepository;
 import cme.restaurantbackend.repository.RestaurantRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,6 +33,8 @@ public class RestaurantController {
 
     @Autowired
     private RestaurantRepository restaurantRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @GetMapping("/restaurant")
     public List<Restaurant> getAllRestaurants() {
@@ -41,9 +46,9 @@ public class RestaurantController {
         return restaurantRepository.findByName(restaurantName.toLowerCase());
     }
 
-    @GetMapping("/restaurantsByCategory/{restaurant_category}")
-    public List<Restaurant> getRestaurantsByCategory(@PathVariable(value = "restaurant_category") String restaurantCategory) {
-        return restaurantRepository.findByCategory(restaurantCategory.toLowerCase());
+    @GetMapping("/restaurantsByCategoryId/{category_id}")
+    public List<RestaurantData> getRestaurantsByCategoryId(@PathVariable(value = "category_id") Long categoryID) {
+        return restaurantRepository.findByCategoryId(categoryID);
     }
 
     @GetMapping("/restaurant/{id}")
@@ -55,21 +60,40 @@ public class RestaurantController {
     }
 
     @PostMapping("/restaurant")
-    public Restaurant createRestaurant(@Valid @RequestBody Restaurant restaurant) {
+    public Restaurant createRestaurant(@Valid @RequestBody RestaurantAbstraction restaurantAbstraction) throws ResourceNotFoundException, IOException {
+
+
+        Long categoryID = restaurantAbstraction.getCategoryID();
+        Category category = categoryRepository.findById(categoryID)
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found for this id :: " + categoryID));
+
+        Restaurant restaurant = new Restaurant();
+        restaurant.setName(restaurantAbstraction.getName());
+        restaurant.setAverageCost(restaurantAbstraction.getAverageCost());
+        restaurant.setAddress(restaurantAbstraction.getAddress());
+        restaurant.setPhoneNumber(restaurantAbstraction.getPhoneNumber());
+        restaurant.setImage(imageToByteArray(restaurantAbstraction.getImage()));
+        restaurant.setCategory(category);
         return restaurantRepository.save(restaurant);
     }
 
     @PutMapping("/restaurant/{id}")
     public ResponseEntity<Restaurant> updateRestaurant(@PathVariable(value = "id") Long RestaurantID,
-                                                       @Valid @RequestBody Restaurant restaurantDetails) throws ResourceNotFoundException {
+                                                       @Valid @RequestBody RestaurantAbstraction restaurantAbstraction) throws ResourceNotFoundException, IOException {
+
         Restaurant restaurant = restaurantRepository.findById(RestaurantID)
                 .orElseThrow(() -> new ResourceNotFoundException("Restaurant not found for this id :: " + RestaurantID));
 
-        restaurant.setName(restaurantDetails.getName());
-        restaurant.setCategory(restaurantDetails.getCategory());
-        restaurant.setAverageCost(restaurantDetails.getAverageCost());
-        restaurant.setAddress(restaurantDetails.getAddress());
-        restaurant.setPhoneNumber(restaurantDetails.getPhoneNumber());
+        Long categoryID = restaurantAbstraction.getCategoryID();
+        Category category = categoryRepository.findById(categoryID)
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found for this id :: " + categoryID));
+
+        restaurant.setName(restaurantAbstraction.getName());
+        restaurant.setAverageCost(restaurantAbstraction.getAverageCost());
+        restaurant.setAddress(restaurantAbstraction.getAddress());
+        restaurant.setPhoneNumber(restaurantAbstraction.getPhoneNumber());
+        restaurant.setImage(imageToByteArray(restaurantAbstraction.getImage()));
+        restaurant.setCategory(category);
 
         final Restaurant updatedRestaurant = restaurantRepository.save(restaurant);
         return ResponseEntity.ok(updatedRestaurant);
@@ -88,7 +112,7 @@ public class RestaurantController {
     }
 
     @PostMapping("/initRestaurant")
-    public void initRestaurant() throws IOException {
+    public void initRestaurant() {
 
         try {
 
@@ -101,10 +125,19 @@ public class RestaurantController {
                     });
 
             resList.forEach(x -> {
-                System.out.println(x.toString());
+
                 Restaurant restaurant = new Restaurant();
+
+                Long categoryID = x.getCategoryID();
+                Category category = null;
+                try {
+                    category = categoryRepository.findById(categoryID)
+                            .orElseThrow(() -> new ResourceNotFoundException("Category not found for this id :: " + categoryID));
+                } catch (ResourceNotFoundException e) {
+                    e.printStackTrace();
+                }
+
                 restaurant.setName(x.getName());
-                restaurant.setCategory(x.getCategory());
                 restaurant.setAverageCost(x.getAverageCost());
                 restaurant.setAddress(x.getAddress());
                 restaurant.setPhoneNumber(x.getPhoneNumber());
@@ -113,6 +146,8 @@ public class RestaurantController {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                restaurant.setCategory(category);
+
                 restaurantRepository.save(restaurant);
             });
 
@@ -123,11 +158,11 @@ public class RestaurantController {
 
     public byte[] imageToByteArray(String path) throws IOException {
         InputStream in = RestaurantController.class.getClassLoader().getResourceAsStream(path);
+        assert in != null;
         BufferedImage bImage = ImageIO.read(in);
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        ImageIO.write(bImage, "jpg", bos );
-        byte [] data = bos.toByteArray();
-        return data;
+        ImageIO.write(bImage, "jpg", bos);
+        return bos.toByteArray();
     }
 
     private File getFileFromResource(String fileName) throws URISyntaxException {

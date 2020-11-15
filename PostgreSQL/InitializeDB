@@ -1,0 +1,23 @@
+
+# Please run the following POST requests to Initialize the Database:
+(They are also found in test/java/cme.restaurantbackend/Requests)
+
+1- For Persons:
+
+###
+POST http://localhost:8080/api/v1/initPerson
+Content-Type: application/json
+
+
+2- For Categories:
+
+###
+POST http://localhost:8080/api/v1/initCategory
+Content-Type: application/json
+
+3- For Restaurants:
+
+###
+POST http://localhost:8080/api/v1/initRestaurant
+Content-Type: application/json
+

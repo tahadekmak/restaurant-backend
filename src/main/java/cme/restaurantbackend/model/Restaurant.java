@@ -12,31 +12,31 @@ public class Restaurant {
 
     private Long id;
     private String name;
-    private String category;
     private double averageCost;
     private String address;
     private String phoneNumber;
     private byte[] image;
-    private Set<Visit> visits = new HashSet<Visit>();
+    private Category category;
+    private Set<Visit> visits = new HashSet<>();
 
     public Restaurant() {
 
     }
 
-    public Restaurant(Long id, String name, String category, double averageCost, String address, String phoneNumber, byte[] image) {
+    public Restaurant(Long id, String name, double averageCost, String address, String phoneNumber, byte[] image, Category category) {
         this.id = id;
         this.name = name;
-        this.category = category;
         this.averageCost = averageCost;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.image = image;
+        this.category = category;
     }
 
     @Id
     @Column(name = "restaurant_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "restaurant_generator")
-    @SequenceGenerator(name="restaurant_generator", sequenceName = "restaurant_seq", allocationSize=50)
+    @SequenceGenerator(name = "restaurant_generator", sequenceName = "restaurant_seq")
     public Long getId() {
         return id;
     }
@@ -52,15 +52,6 @@ public class Restaurant {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    @Column(name = "restaurant_category", nullable = false)
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
     }
 
     @Column(name = "restaurant_average_cost", nullable = false)
@@ -91,13 +82,23 @@ public class Restaurant {
     }
 
     @Lob
-    @Column(name = "restaurant_image", nullable = true)
+    @Column(name = "restaurant_image")
     public byte[] getImage() {
         return image;
     }
 
     public void setImage(byte[] image) {
         this.image = image;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     @JsonIgnore

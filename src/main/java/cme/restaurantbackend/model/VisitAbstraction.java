@@ -1,8 +1,5 @@
 package cme.restaurantbackend.model;
 
-import javax.persistence.*;
-import java.util.Date;
-
 public class VisitAbstraction {
 
     private Long personID;

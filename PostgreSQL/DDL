@@ -1,11 +1,18 @@
+
 create database restaurantdb;
 set timezone = "UTC";
 
+# The following DDL statements are auto-generated, please check resources/application.properties
+
 create table person (person_id int8 not null, person_fname varchar(255) not null, person_lname varchar(255) not null, primary key (person_id));
-create table restaurant (restaurant_id int8 not null, restaurant_address varchar(255) not null, restaurant_average_cost float8 not null, restaurant_category varchar(255) not null, restaurant_image oid, restaurant_name varchar(255) not null, restaurant_phone_number varchar(255) not null, primary key (restaurant_id));
+create table restaurant (restaurant_id int8 not null, restaurant_address varchar(255) not null, restaurant_average_cost float8 not null, restaurant_image oid, restaurant_name varchar(255) not null, restaurant_phone_number varchar(255) not null, category_id int8 not null, primary key (restaurant_id));
 create table visit (visit_id int8 not null, visit_date timestamp with time zone not null, person_id int8, restaurant_id int8, primary key (visit_id));
+
+create sequence category_seq start 1 increment 50;
 create sequence person_seq start 1 increment 50;
 create sequence restaurant_seq start 1 increment 50;
 create sequence visit_seq start 1 increment 50;
+
+alter table restaurant add constraint FK8jj0ghjhpw9xiue5pkqxb67s7 foreign key (category_id) references category;
 alter table visit add constraint visit_person_foreign_key foreign key (person_id) references person;
 alter table visit add constraint visit_restaurant_foreign_key foreign key (restaurant_id) references restaurant;

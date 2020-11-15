@@ -1,6 +1,7 @@
 package cme.restaurantbackend.Tests;
 
 import cme.restaurantbackend.RestaurantBackendApplication;
+import cme.restaurantbackend.model.Category;
 import cme.restaurantbackend.model.Restaurant;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -42,7 +43,7 @@ public class RestaurantTest {
     @Test
     public void testGetAllRestaurants() {
         HttpHeaders headers = new HttpHeaders();
-        HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+        HttpEntity<String> entity = new HttpEntity<>(null, headers);
         ResponseEntity<String> response = restTemplate.exchange(getRootUrl() + "/restaurant",
                 HttpMethod.GET, entity, String.class);
         assertNotNull(response.getBody());
@@ -51,7 +52,7 @@ public class RestaurantTest {
     @Test
     public void testGetRestaurantsByName() {
         HttpHeaders headers = new HttpHeaders();
-        HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+        HttpEntity<String> entity = new HttpEntity<>(null, headers);
         ResponseEntity<String> response = restTemplate.exchange(getRootUrl() + "/restaurantsByName/KFC",
                 HttpMethod.GET, entity, String.class);
         assertNotNull(response.getBody());
@@ -60,8 +61,8 @@ public class RestaurantTest {
     @Test
     public void testGetRestaurantsByCategory() {
         HttpHeaders headers = new HttpHeaders();
-        HttpEntity<String> entity = new HttpEntity<String>(null, headers);
-        ResponseEntity<String> response = restTemplate.exchange(getRootUrl() + "/restaurantsByCategory/American",
+        HttpEntity<String> entity = new HttpEntity<>(null, headers);
+        ResponseEntity<String> response = restTemplate.exchange(getRootUrl() + "/restaurantsByCategoryId/1",
                 HttpMethod.GET, entity, String.class);
         assertNotNull(response.getBody());
     }
@@ -77,10 +78,15 @@ public class RestaurantTest {
     public void testCreateRestaurant() throws IOException {
         Restaurant restaurant = new Restaurant();
         restaurant.setName("KFC");
-        restaurant.setCategory("American");
         restaurant.setAverageCost(15);
         restaurant.setAddress("Beirut");
         restaurant.setImage(imageToByteArray("images/image1.jpg"));
+
+        Category category = new Category();
+        category.setId(1L);
+        category.setName("American");
+        restaurant.setCategory(category);
+
         ResponseEntity<Restaurant> postResponse = restTemplate.postForEntity(getRootUrl() + "/restaurant", restaurant, Restaurant.class);
         assertNotNull(postResponse);
         assertNotNull(postResponse.getBody());
@@ -91,10 +97,15 @@ public class RestaurantTest {
         int id = 1;
         Restaurant restaurant = restTemplate.getForObject(getRootUrl() + "/restaurant/" + id, Restaurant.class);
         restaurant.setName("KFC");
-        restaurant.setCategory("American");
         restaurant.setAverageCost(20);
         restaurant.setAddress("Beirut");
         restaurant.setImage(imageToByteArray("images/image1.jpg"));
+
+        Category category = new Category();
+        category.setId(1L);
+        category.setName("American");
+        restaurant.setCategory(category);
+
         restTemplate.put(getRootUrl() + "/person/" + id, restaurant);
         Restaurant updatedRestaurant = restTemplate.getForObject(getRootUrl() + "/restaurant/" + id, Restaurant.class);
         assertNotNull(updatedRestaurant);
@@ -107,7 +118,7 @@ public class RestaurantTest {
         assertNotNull(restaurant);
         restTemplate.delete(getRootUrl() + "/restaurant/" + id);
         try {
-            restaurant = restTemplate.getForObject(getRootUrl() + "/restaurant/" + id, Restaurant.class);
+            restTemplate.getForObject(getRootUrl() + "/restaurant/" + id, Restaurant.class);
         } catch (final HttpClientErrorException e) {
             assertEquals(e.getStatusCode(), HttpStatus.NOT_FOUND);
         }
@@ -115,10 +126,10 @@ public class RestaurantTest {
 
     public byte[] imageToByteArray(String path) throws IOException {
         InputStream in = RestaurantTest.class.getClassLoader().getResourceAsStream(path);
+        assert in != null;
         BufferedImage bImage = ImageIO.read(in);
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        ImageIO.write(bImage, "jpg", bos );
-        byte [] data = bos.toByteArray();
-        return data;
+        ImageIO.write(bImage, "jpg", bos);
+        return bos.toByteArray();
     }
 }

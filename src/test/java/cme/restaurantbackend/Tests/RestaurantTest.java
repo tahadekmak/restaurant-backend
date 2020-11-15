@@ -59,10 +59,10 @@ public class RestaurantTest {
     }
 
     @Test
-    public void testGetRestaurantsByCategory() {
+    public void testGetRestaurantsByCategoryID() {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
-        ResponseEntity<String> response = restTemplate.exchange(getRootUrl() + "/restaurantsByCategoryId/1",
+        ResponseEntity<String> response = restTemplate.exchange(getRootUrl() + "/restaurantsByCategoryID/1",
                 HttpMethod.GET, entity, String.class);
         assertNotNull(response.getBody());
     }

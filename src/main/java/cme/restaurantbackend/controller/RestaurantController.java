@@ -42,11 +42,11 @@ public class RestaurantController {
     }
 
     @GetMapping("/restaurantsByName/{restaurant_name}")
-    public List<Restaurant> getRestaurantsByName(@PathVariable(value = "restaurant_name") String restaurantName) {
+    public List<RestaurantData> getRestaurantsByName(@PathVariable(value = "restaurant_name") String restaurantName) {
         return restaurantRepository.findByName(restaurantName.toLowerCase());
     }
 
-    @GetMapping("/restaurantsByCategoryId/{category_id}")
+    @GetMapping("/restaurantsByCategoryID/{category_id}")
     public List<RestaurantData> getRestaurantsByCategoryId(@PathVariable(value = "category_id") Long categoryID) {
         return restaurantRepository.findByCategoryId(categoryID);
     }
@@ -61,7 +61,6 @@ public class RestaurantController {
 
     @PostMapping("/restaurant")
     public Restaurant createRestaurant(@Valid @RequestBody RestaurantAbstraction restaurantAbstraction) throws ResourceNotFoundException, IOException {
-
 
         Long categoryID = restaurantAbstraction.getCategoryID();
         Category category = categoryRepository.findById(categoryID)

@@ -12,9 +12,9 @@ import java.util.List;
 @Repository
 public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
 
-    @Query(value = "SELECT * FROM restaurant WHERE lower(restaurant_name) like %:restaurantName%", nativeQuery = true)
-    List<Restaurant> findByName(@Param("restaurantName") String restaurantName);
+    @Query("select new cme.restaurantbackend.model.RestaurantData(r.id, r.name, r.averageCost, r.address, r.phoneNumber, r.image, c.name) from Restaurant r join r.category c  where lower(r.name) like %:restaurantName% order by r.name")
+    List<RestaurantData> findByName(@Param("restaurantName") String restaurantName);
 
-    @Query("select new cme.restaurantbackend.model.RestaurantData(r.name, r.averageCost, r.address, r.phoneNumber, r.image, c.name) from Restaurant r join r.category c  where c.id = :categoryId order by r.name")
-    List<RestaurantData> findByCategoryId(@Param("categoryId") Long categoryId);
+    @Query("select new cme.restaurantbackend.model.RestaurantData(r.id, r.name, r.averageCost, r.address, r.phoneNumber, r.image, c.name) from Restaurant r join r.category c  where c.id = :categoryID order by r.name")
+    List<RestaurantData> findByCategoryId(@Param("categoryID") Long categoryID);
 }

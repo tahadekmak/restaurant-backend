@@ -2,6 +2,7 @@ package cme.restaurantbackend.service;
 
 import cme.restaurantbackend.MyFunctions;
 import cme.restaurantbackend.ResourceNotFoundException;
+import cme.restaurantbackend.dto.InitRestaurant;
 import cme.restaurantbackend.model.Category;
 import cme.restaurantbackend.model.Restaurant;
 import cme.restaurantbackend.repository.CategoryRepository;
@@ -106,11 +107,10 @@ public class RestaurantService {
     public void initRestaurant() {
 
             try {
-
                 File file = MyFunctions.getFileFromResource("RESTAURANTS_DATA.json");
 
                 final ObjectMapper objectMapper = new ObjectMapper();
-                List<Restaurant> resList = objectMapper.readValue(
+                List<InitRestaurant> resList = objectMapper.readValue(
                         file,
                         new TypeReference<>() {
                         });
@@ -133,7 +133,7 @@ public class RestaurantService {
                     restaurant.setAddress(x.getAddress());
                     restaurant.setPhoneNumber(x.getPhoneNumber());
                     try {
-                        restaurant.setImage(MyFunctions.imageToByteArray(Arrays.toString(x.getImage())));
+                        restaurant.setImage(MyFunctions.imageToByteArray(x.getImage()));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

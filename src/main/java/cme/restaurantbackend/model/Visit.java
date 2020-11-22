@@ -12,7 +12,7 @@ public class Visit {
     private Person person;
     private Restaurant restaurant;
 
-    @JsonFormat(pattern="d/M/uuuu' 'H:m:s")
+    @JsonFormat(pattern="d-M-uuuu' 'H:m:s")
     private LocalDateTime date;
 
     public Visit() {

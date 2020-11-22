@@ -16,7 +16,7 @@ POST http://localhost:8080/api/v1/visit/person/1/restaurant/1
 Content-Type: application/json
 
 {
-  "date": "14/11/2020 10:0:0"
+  "date": "14-11-2020 10:0:0"
 }
 
 ###
@@ -25,7 +25,7 @@ PUT http://localhost:8080/api/v1/visit/1/person/1/restaurant/2
 Content-Type: application/json
 
 {
-  "date": "14/11/2020 5:0:0"
+  "date": "14-11-2020 5:0:0"
 }
 
 ###

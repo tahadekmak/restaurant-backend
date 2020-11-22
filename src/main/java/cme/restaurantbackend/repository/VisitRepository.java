@@ -1,5 +1,6 @@
 package cme.restaurantbackend.repository;
 
+import cme.restaurantbackend.dto.VisitBrief;
 import cme.restaurantbackend.model.Visit;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,6 +12,6 @@ import java.util.List;
 @Repository
 public interface VisitRepository extends JpaRepository<Visit, Long> {
 
-    @Query("select new cme.restaurantbackend.model.Visit(v.id, v.person, v.restaurant, v.date) from Visit v join v.restaurant r  where v.person.id = :personId order by v.id")
-    List<Visit> findByPersonId(@Param("personId") Long personId);
+    @Query("select new cme.restaurantbackend.dto.VisitBrief(v.id, v.restaurant.name, v.date) from Visit v join v.restaurant r  where v.person.id = :personId order by v.id")
+    List<VisitBrief> findByPersonId(@Param("personId") Long personId);
 }

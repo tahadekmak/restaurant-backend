@@ -2,6 +2,7 @@ package cme.restaurantbackend.service;
 
 import cme.restaurantbackend.MyFunctions;
 import cme.restaurantbackend.ResourceNotFoundException;
+import cme.restaurantbackend.dto.VisitBrief;
 import cme.restaurantbackend.model.Category;
 import cme.restaurantbackend.model.Person;
 import cme.restaurantbackend.model.Restaurant;
@@ -48,7 +49,7 @@ public class VisitService {
         }
     }
 
-    public List<Visit> getVisitsByPersonId(long personId) {
+    public List<VisitBrief> getVisitsByPersonId(long personId) {
 
         return visitRepository.findByPersonId(personId);
     }

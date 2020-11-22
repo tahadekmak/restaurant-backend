@@ -12,7 +12,7 @@ Accept: application/json
 
 ###
 
-POST http://localhost:8080/api/v1/visit/person/1/restaurant/152
+POST http://localhost:8080/api/v1/visit/person/1/restaurant/1
 Content-Type: application/json
 
 {

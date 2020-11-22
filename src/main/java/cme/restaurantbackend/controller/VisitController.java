@@ -1,25 +1,16 @@
 package cme.restaurantbackend.controller;
 
 import cme.restaurantbackend.ResourceNotFoundException;
+import cme.restaurantbackend.dto.VisitBrief;
 import cme.restaurantbackend.model.*;
-import cme.restaurantbackend.repository.PersonRepository;
-import cme.restaurantbackend.repository.RestaurantRepository;
-import cme.restaurantbackend.repository.VisitRepository;
+
 import cme.restaurantbackend.service.VisitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
-import java.text.ParseException;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -42,7 +33,7 @@ public class VisitController {
     }
 
     @GetMapping("/visitsByPersonId/{person_id}")
-    public ResponseEntity<List<Visit>> getVisitsByPersonId(@PathVariable(value = "person_id") long personId) throws ResourceNotFoundException {
+    public ResponseEntity<List<VisitBrief>> getVisitsByPersonId(@PathVariable(value = "person_id") long personId) {
         return ResponseEntity.ok().body(visitService.getVisitsByPersonId(personId));
     }
 

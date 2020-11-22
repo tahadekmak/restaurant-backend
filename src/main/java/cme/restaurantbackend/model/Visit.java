@@ -1,7 +1,6 @@
 package cme.restaurantbackend.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -30,7 +29,7 @@ public class Visit {
     @Id
     @Column(name = "visit_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "visit_generator")
-    @SequenceGenerator(name = "visit_generator", sequenceName = "visit_seq", allocationSize = 50)
+    @SequenceGenerator(name = "visit_generator", sequenceName = "visit_seq")
     public Long getId() {
         return id;
     }

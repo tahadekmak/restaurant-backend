@@ -5,7 +5,9 @@ import cme.restaurantbackend.model.*;
 import cme.restaurantbackend.repository.PersonRepository;
 import cme.restaurantbackend.repository.RestaurantRepository;
 import cme.restaurantbackend.repository.VisitRepository;
+import cme.restaurantbackend.service.VisitService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,111 +27,44 @@ import java.util.Map;
 public class VisitController {
 
     @Autowired
-    private VisitRepository visitRepository;
-    @Autowired
-    private PersonRepository personRepository;
-    @Autowired
-    private RestaurantRepository restaurantRepository;
+    private VisitService visitService;
 
     @GetMapping("/visit")
-    public List<Visit> getAllVisits() {
-        return visitRepository.findAll();
-    }
-
-    @GetMapping("/visitsByPersonId/{id}")
-    public List<VisitData> getVisitsByPersonId(@PathVariable(value = "id") Long personId) {
-        return visitRepository.findByPersonId(personId);
+    public ResponseEntity<List<Visit>> getAllVisits() {
+        return ResponseEntity.ok().body(visitService.getAllVisits());
     }
 
     @GetMapping("/visit/{id}")
-    public ResponseEntity<Visit> getVisitById(@PathVariable(value = "id") Long VisitID)
+    public ResponseEntity<Visit> getVisitById(@PathVariable(value = "id") long visitId)
             throws ResourceNotFoundException {
-        Visit visit = visitRepository.findById(VisitID)
-                .orElseThrow(() -> new ResourceNotFoundException("Visit not found for this id :: " + VisitID));
-        return ResponseEntity.ok().body(visit);
+
+        return ResponseEntity.ok().body(visitService.getVisitById(visitId));
     }
 
-    @PostMapping("/visit")
-    public Visit createVisit(@Valid @RequestBody VisitAbstraction visitAbstraction) throws ResourceNotFoundException {
-
-        Long personID = visitAbstraction.getPersonID();
-        Long restaurantID = visitAbstraction.getRestaurantID();
-        String stringDate = visitAbstraction.getDate();
-
-        DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter
-                .ofPattern("d/M/uuuu'T'H:m:s:SSSXXXXX");
-        OffsetDateTime ff = OffsetDateTime.parse(stringDate, DATE_TIME_FORMATTER);
-        int year = ff.getYear();
-        int month = ff.getMonthValue();
-        int day = ff.getDayOfMonth();
-        int hours = ff.getHour();
-        int minutes = ff.getMinute();
-        int seconds = ff.getSecond();
-        ZoneOffset zoneOffSet = ff.getOffset();
-
-        OffsetDateTime odtInstanceAtOffset = LocalDateTime.of(
-                year, month, day,
-                hours, minutes, seconds
-        ).atOffset(zoneOffSet);
-
-        Person person = personRepository.findById(personID)
-                .orElseThrow(() -> new ResourceNotFoundException("Person not found for this id :: " + personID));
-        Restaurant restaurant = restaurantRepository.findById(restaurantID)
-                .orElseThrow(() -> new ResourceNotFoundException("Restaurant not found for this id :: " + restaurantID));
-        Visit visit = new Visit(person, restaurant, odtInstanceAtOffset);
-
-        return visitRepository.save(visit);
+    @GetMapping("/visitsByPersonId/{person_id}")
+    public ResponseEntity<List<Visit>> getVisitsByPersonId(@PathVariable(value = "person_id") long personId) throws ResourceNotFoundException {
+        return ResponseEntity.ok().body(visitService.getVisitsByPersonId(personId));
     }
 
-    @PutMapping("/visit/{id}")
-    public ResponseEntity<Visit> updateVisit(@PathVariable(value = "id") Long VisitID,
-                                             @Valid @RequestBody VisitAbstraction visitAbstraction) throws ResourceNotFoundException {
-        Visit visit = visitRepository.findById(VisitID)
-                .orElseThrow(() -> new ResourceNotFoundException("Visit not found for this id :: " + VisitID));
+    @PostMapping("/visit/person/{person_id}/restaurant/{restaurant_id}")
+    public ResponseEntity<Visit> createVisit(@PathVariable(value = "person_id") long personId,
+                             @PathVariable(value = "restaurant_id") long restaurantId,
+                             @Valid @RequestBody Visit visit) throws ResourceNotFoundException {
 
-        Long personID = visitAbstraction.getPersonID();
-        Long restaurantID = visitAbstraction.getRestaurantID();
-        String stringDate = visitAbstraction.getDate();
+        return ResponseEntity.ok().body(visitService.createVisit(personId, restaurantId, visit));
+    }
 
-        DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter
-                .ofPattern("d/M/uuuu'T'H:m:s:SSSXXXXX");
-        OffsetDateTime ff = OffsetDateTime.parse(stringDate, DATE_TIME_FORMATTER);
-        int year = ff.getYear();
-        int month = ff.getMonthValue();
-        int day = ff.getDayOfMonth();
-        int hours = ff.getHour();
-        int minutes = ff.getMinute();
-        int seconds = ff.getSecond();
-        ZoneOffset zoneOffSet = ff.getOffset();
-
-        OffsetDateTime odtInstanceAtOffset = LocalDateTime.of(
-                year, month, day,
-                hours, minutes, seconds
-        ).atOffset(zoneOffSet);
-
-        Person person = personRepository.findById(personID)
-                .orElseThrow(() -> new ResourceNotFoundException("Person not found for this id :: " + personID));
-        Restaurant restaurant = restaurantRepository.findById(restaurantID)
-                .orElseThrow(() -> new ResourceNotFoundException("Restaurant not found for this id :: " + restaurantID));
-
-        visit.setPerson(person);
-        visit.setRestaurant(restaurant);
-        visit.setDate(odtInstanceAtOffset);
-
-        final Visit updatedVisit = visitRepository.save(visit);
-        return ResponseEntity.ok(updatedVisit);
+    @PutMapping("/visit/{id}/person/{person_id}/restaurant/{restaurant_id}")
+    public ResponseEntity<Visit> updateVisit(@PathVariable(value = "id") long visitId,
+                                                  @PathVariable(value = "person_id") long personId,
+                                                  @PathVariable(value = "restaurant_id") long restaurantId,
+                                                       @Valid @RequestBody Visit visit) throws ResourceNotFoundException {
+        return ResponseEntity.ok().body(visitService.updateVisit(visitId, personId, restaurantId, visit));
     }
 
     @DeleteMapping("/visit/{id}")
-    public Map<String, Boolean> deleteVisit(@PathVariable(value = "id") Long VisitID)
-            throws ResourceNotFoundException {
-        Visit visit = visitRepository.findById(VisitID)
-                .orElseThrow(() -> new ResourceNotFoundException("Visit not found for this id :: " + VisitID));
-
-        visitRepository.delete(visit);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return response;
+    public HttpStatus deleteVisit(@PathVariable(value = "id") Long visitId) throws ResourceNotFoundException {
+        visitService.deleteVisit(visitId);
+        return HttpStatus.OK;
     }
-
 }

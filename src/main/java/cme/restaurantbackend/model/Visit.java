@@ -1,9 +1,9 @@
 package cme.restaurantbackend.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "visit")
@@ -12,13 +12,16 @@ public class Visit {
     private Long id;
     private Person person;
     private Restaurant restaurant;
-    private OffsetDateTime date;
+
+    @JsonFormat(pattern="d/M/uuuu' 'H:m:s")
+    private LocalDateTime date;
 
     public Visit() {
 
     }
 
-    public Visit(Person person, Restaurant restaurant, OffsetDateTime date) {
+    public Visit(Long id, Person person, Restaurant restaurant, LocalDateTime date) {
+        this.id = id;
         this.person = person;
         this.restaurant = restaurant;
         this.date = date;
@@ -36,7 +39,6 @@ public class Visit {
         this.id = id;
     }
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "person_id")
     public Person getPerson() {
@@ -47,7 +49,6 @@ public class Visit {
         this.person = person;
     }
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "restaurant_id")
     public Restaurant getRestaurant() {
@@ -59,11 +60,11 @@ public class Visit {
     }
 
     @Column(name = "visit_date", nullable = false)
-    public OffsetDateTime getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(OffsetDateTime date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 }

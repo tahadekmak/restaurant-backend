@@ -12,13 +12,6 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.HttpClientErrorException;
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -75,39 +68,35 @@ public class RestaurantTest {
     }
 
     @Test
-    public void testCreateRestaurant() throws IOException {
+    public void testCreateRestaurant() {
         Restaurant restaurant = new Restaurant();
         restaurant.setName("KFC");
         restaurant.setAverageCost(15);
         restaurant.setAddress("Beirut");
-        restaurant.setImage(imageToByteArray("images/image1.jpg"));
 
         Category category = new Category();
         category.setId(1L);
         category.setName("American");
-        restaurant.setCategory(category);
 
-        ResponseEntity<Restaurant> postResponse = restTemplate.postForEntity(getRootUrl() + "/restaurant", restaurant, Restaurant.class);
+        ResponseEntity<Restaurant> postResponse = restTemplate.postForEntity(getRootUrl() + "/restaurant/category/" + category.getId(), restaurant, Restaurant.class);
         assertNotNull(postResponse);
         assertNotNull(postResponse.getBody());
     }
 
     @Test
-    public void testUpdateRestaurant() throws IOException {
+    public void testUpdateRestaurant() {
         int id = 1;
         Restaurant restaurant = restTemplate.getForObject(getRootUrl() + "/restaurant/" + id, Restaurant.class);
         restaurant.setName("KFC");
         restaurant.setAverageCost(20);
         restaurant.setAddress("Beirut");
-        restaurant.setImage(imageToByteArray("images/image1.jpg"));
 
         Category category = new Category();
         category.setId(1L);
         category.setName("American");
-        restaurant.setCategory(category);
 
         restTemplate.put(getRootUrl() + "/person/" + id, restaurant);
-        Restaurant updatedRestaurant = restTemplate.getForObject(getRootUrl() + "/restaurant/" + id, Restaurant.class);
+        Restaurant updatedRestaurant = restTemplate.getForObject(getRootUrl() + "/restaurant/" + id + "/category/" + category.getId(), Restaurant.class);
         assertNotNull(updatedRestaurant);
     }
 
@@ -122,14 +111,5 @@ public class RestaurantTest {
         } catch (final HttpClientErrorException e) {
             assertEquals(e.getStatusCode(), HttpStatus.NOT_FOUND);
         }
-    }
-
-    public byte[] imageToByteArray(String path) throws IOException {
-        InputStream in = RestaurantTest.class.getClassLoader().getResourceAsStream(path);
-        assert in != null;
-        BufferedImage bImage = ImageIO.read(in);
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        ImageIO.write(bImage, "jpg", bos);
-        return bos.toByteArray();
     }
 }

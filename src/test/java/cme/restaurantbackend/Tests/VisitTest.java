@@ -1,9 +1,10 @@
 package cme.restaurantbackend.Tests;
 
 import cme.restaurantbackend.RestaurantBackendApplication;
+import cme.restaurantbackend.model.Category;
+import cme.restaurantbackend.model.Person;
+import cme.restaurantbackend.model.Restaurant;
 import cme.restaurantbackend.model.Visit;
-import cme.restaurantbackend.model.VisitAbstraction;
-import cme.restaurantbackend.model.VisitData;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.HttpClientErrorException;
-
+import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -46,9 +47,9 @@ public class VisitTest {
 
     @Test
     public void testGetVisitsByPersonId() {
-        VisitData visitData = restTemplate.getForObject(getRootUrl() + "/visitsByPersonId/1", VisitData.class);
-        System.out.println(visitData.getRestaurantName());
-        assertNotNull(visitData);
+        Visit visit = restTemplate.getForObject(getRootUrl() + "/visitsByPersonId/1", Visit.class);
+        System.out.println(visit.getDate());
+        assertNotNull(visit);
     }
 
     @Test
@@ -60,11 +61,27 @@ public class VisitTest {
 
     @Test
     public void testCreateVisit() {
-        VisitAbstraction visitData = new VisitAbstraction();
-        visitData.setPersonID(1L);
-        visitData.setRestaurantID(1L);
-        visitData.setDate("5/5/2020");
-        ResponseEntity<Visit> postResponse = restTemplate.postForEntity(getRootUrl() + "/visit", visitData, Visit.class);
+
+        Person person = new Person();
+        person.setId(1L);
+        person.setFirstName("ali");
+        person.setLastName("ali");
+
+        Restaurant restaurant = new Restaurant();
+        restaurant.setId(1L);
+        restaurant.setName("KFC");
+        restaurant.setAverageCost(15);
+        restaurant.setAddress("Beirut");
+
+        Category category = new Category();
+        category.setId(1L);
+        category.setName("American");
+        restaurant.setCategory(category);
+
+        Visit visit = new Visit();
+        visit.setDate(LocalDateTime.now());
+
+        ResponseEntity<Visit> postResponse = restTemplate.postForEntity(getRootUrl() + "/visit/person/1/restaurant/1", visit, Visit.class);
         assertNotNull(postResponse);
         assertNotNull(postResponse.getBody());
     }
@@ -72,11 +89,10 @@ public class VisitTest {
     @Test
     public void testUpdateVisit() {
         int id = 1;
-        VisitAbstraction visitData = new VisitAbstraction();
-        visitData.setPersonID(1L);
-        visitData.setRestaurantID(1L);
-        visitData.setDate("8/5/2020");
-        restTemplate.put(getRootUrl() + "/visit/" + id, visitData);
+        Visit visit = new Visit();
+        visit.setDate(LocalDateTime.now());
+
+        restTemplate.put(getRootUrl() + "/visit/1/person/1/restaurant/1", visit);
         Visit updatedVisit = restTemplate.getForObject(getRootUrl() + "/visit/" + id, Visit.class);
         assertNotNull(updatedVisit);
     }

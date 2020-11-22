@@ -2,21 +2,13 @@ package cme.restaurantbackend.controller;
 
 import cme.restaurantbackend.ResourceNotFoundException;
 import cme.restaurantbackend.model.Person;
-import cme.restaurantbackend.model.PersonAbstraction;
-import cme.restaurantbackend.repository.PersonRepository;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import cme.restaurantbackend.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
-import java.io.File;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -24,85 +16,39 @@ import java.util.Map;
 public class PersonController {
 
     @Autowired
-    private PersonRepository personRepository;
+    private PersonService personService;
 
     @GetMapping("/person")
-    public List<Person> getAllPersons() {
-        return personRepository.findAll();
+    public ResponseEntity <List<Person>> getAllPersons() {
+        return ResponseEntity.ok().body(personService.getAllPersons());
     }
 
     @GetMapping("/person/{id}")
-    public ResponseEntity<Person> getPersonById(@PathVariable(value = "id") Long personID)
-            throws ResourceNotFoundException {
-        Person person = personRepository.findById(personID)
-                .orElseThrow(() -> new ResourceNotFoundException("Person not found for this id :: " + personID));
-        return ResponseEntity.ok().body(person);
+    public ResponseEntity<Person> getPersonById(@PathVariable long id) throws ResourceNotFoundException {
+        return ResponseEntity.ok().body(personService.getPersonById(id));
     }
 
     @PostMapping("/person")
-    public Person createPerson(@Valid @RequestBody Person person) {
-        return personRepository.save(person);
+    public ResponseEntity<Person> createPerson(@Valid @RequestBody Person person) {
+        return ResponseEntity.ok().body(personService.createPerson(person));
     }
 
     @PutMapping("/person/{id}")
-    public ResponseEntity<Person> updatePerson(@PathVariable(value = "id") Long personID,
-                                               @Valid @RequestBody Person personDetails) throws ResourceNotFoundException {
-        Person person = personRepository.findById(personID)
-                .orElseThrow(() -> new ResourceNotFoundException("Person not found for this id :: " + personID));
-
-        person.setLastName(personDetails.getLastName());
-        person.setFirstName(personDetails.getFirstName());
-        final Person updatedPerson = personRepository.save(person);
-        return ResponseEntity.ok(updatedPerson);
+    public ResponseEntity<Person> updatePerson(@PathVariable long id,
+                                               @Valid @RequestBody Person person) throws ResourceNotFoundException {
+        person.setId(id);
+        return ResponseEntity.ok().body(personService.updatePerson(person));
     }
 
     @DeleteMapping("/person/{id}")
-    public Map<String, Boolean> deletePerson(@PathVariable(value = "id") Long personID)
-            throws ResourceNotFoundException {
-        Person person = personRepository.findById(personID)
-                .orElseThrow(() -> new ResourceNotFoundException("Person not found for this id :: " + personID));
-
-        personRepository.delete(person);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return response;
+    public HttpStatus deletePerson(@PathVariable long id) throws ResourceNotFoundException {
+        personService.deletePerson(id);
+        return HttpStatus.OK;
     }
 
     @PostMapping("/initPerson")
-    public void initPerson() {
-
-        try {
-
-            File file = this.getFileFromResource("PERSONS_DATA.json");
-
-            final ObjectMapper objectMapper = new ObjectMapper();
-            List<PersonAbstraction> resList = objectMapper.readValue(
-                    file,
-                    new TypeReference<>() {
-                    });
-
-            resList.forEach(x -> {
-                Person person = new Person();
-                person.setFirstName(x.getFirstName());
-                person.setLastName(x.getLastName());
-
-                personRepository.save(person);
-            });
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    private File getFileFromResource(String fileName) throws URISyntaxException {
-
-        ClassLoader classLoader = getClass().getClassLoader();
-        URL resource = classLoader.getResource(fileName);
-        if (resource == null) {
-            throw new IllegalArgumentException("file not found! " + fileName);
-        } else {
-            return new File(resource.toURI());
-        }
-
+    public HttpStatus initPerson() {
+        personService.initPerson();
+        return HttpStatus.OK;
     }
 }
